@@ -1,5 +1,4 @@
-// lo que devuelves/operador(extremo1, extremo2) de la operacion
-
+// JULIAN MARTINEZ RODENAS     IBRAHIM GARCES EL BSSITA
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -18,10 +17,12 @@ typedef struct tMatriz {
 
 bool leer(string nomFichero, tMatriz& matriz);
 double calcularDiagonal(tMatriz& matriz);
+double calcularDiagonalInv(tMatriz& matriz);
 bool comprobarFila(tMatriz& matriz, int fil, const double numMag);
 bool comprobarColumna(tMatriz& matriz, int col, const double numMag);
 bool sumabienF(tMatriz& matriz, int fil, const double numMag);
 bool sumabienC(tMatriz& matriz, int col, const double numMag);
+bool sumabienD(tMatriz& matriz, const double numMag);
 bool comprobarMatrizMag(tMatriz& matriz, int fil, int col, const double numMag);
 
 
@@ -30,12 +31,12 @@ int main() {
 	tMatriz matriz;
 	double constante;
 	leer("matriz.txt", matriz);
-	 constante = calcularDiagonal(matriz);
+	constante = calcularDiagonal(matriz);
 	 if ((matriz.nFils = matriz.nCols) && comprobarMatrizMag(matriz, matriz.nFils, matriz.nCols, constante)) {
 		 cout << " EL CUADRADO ES UN CUADRADO MAGICO" << endl;
 	 }
 	 else {
-		 cout << " EL CUADRADO NOOOOOO ES UN CUADRADO MAGICO" << endl;
+		 cout << " EL CUADRADO NO ES UN CUADRADO MAGICO" << endl;
 
 	 }
 
@@ -71,6 +72,15 @@ double calcularDiagonal(tMatriz& matriz) {
 	return constante;
 }
 
+double calcularDiagonalInv(tMatriz& matriz) {
+	double constante = 0; 
+	int j = matriz.nCols -1;
+	for (int i = 0; i < matriz.nFils; i++) {
+			constante = constante + matriz.mat[i][j];
+			j--;
+	}
+	return constante;
+}
 
 bool comprobarFila(tMatriz& matriz, int fil, const double numMag) {
 	double constante = 0;
@@ -141,9 +151,22 @@ bool sumabienC(tMatriz& matriz, int col, const double numMag) {
 	return seguir;
 }
 
+bool sumabienD(tMatriz& matriz, const double numMag) {
+	double D1, D2;
+	bool sumaBien = false;
+	D1 = calcularDiagonal(matriz);
+	D2 = calcularDiagonal(matriz);
+	if ((D1 == numMag) && (D2 == numMag)) {
+		sumaBien = true;
+	}
+	return sumaBien;
+}
+
+
 
 bool comprobarMatrizMag(tMatriz& matriz, int fil, int col, const double numMag) {
 	bool magico = false;
+	bool diagonalBien = sumabienD(matriz, numMag);
 	bool filaBien = sumabienF(matriz, fil, numMag);
 	bool columnaBien = sumabienC(matriz, col, numMag);
 	if (filaBien && columnaBien) {
